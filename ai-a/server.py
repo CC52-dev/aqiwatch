@@ -635,10 +635,10 @@ if __name__ == '__main__':
     
     # Initialize predictor
     if initialize_predictor():
-        print("🚀 Server starting on http://localhost:5000")
-        print("📖 API Documentation available at http://localhost:5000/")
-        print("🔍 Health check at http://localhost:5000/health")
-        print("🌍 AQI Overview at http://localhost:5000/overview?lat=37.7749&lon=-122.4194")
+        print("🚀 Server starting on https://api.aqi.watch")
+        print("📖 API Documentation available at https://api.aqi.watch/")
+        print("🔍 Health check at https://api.aqi.watch/health")
+        print("🌍 AQI Overview at https://api.aqi.watch/overview?lat=37.7749&lon=-122.4194")
         app.run(host='0.0.0.0', port=5000, debug=False)
     else:
         print("❌ Failed to start server - predictor initialization failed")

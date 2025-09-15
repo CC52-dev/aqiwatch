@@ -38,7 +38,7 @@ The website now provides comprehensive air quality analysis with real-time data 
 cd ai-a
 python server.py
 ```
-The server will run on `http://localhost:5000`
+The server will run on `https://api.aqi.watch`
 
 ### **2. Start the Next.js Website**
 ```bash
@@ -51,7 +51,7 @@ The website will run on `http://localhost:3000`
 ### **3. Environment Configuration**
 Create a `.env.local` file (optional):
 ```env
-NEXT_PUBLIC_AQI_API_URL=http://localhost:5000
+NEXT_PUBLIC_AQI_API_URL=https://api.aqi.watch
 ```
 
 ## 🎯 **Features Implemented**

@@ -23,7 +23,7 @@ docker-compose up -d --build
 
 This will start:
 - Frontend (Next.js) on http://localhost:3000
-- AI API (Flask) on http://localhost:5000
+- AI API (Flask) on https://api.aqi.watch
 
 ### Option 2: Individual Services
 
@@ -52,7 +52,7 @@ docker run -p 5000:5000 aqi-api
 ### Frontend (.env.local)
 
 ```env
-NEXT_PUBLIC_AQI_API_URL=http://localhost:5000
+NEXT_PUBLIC_AQI_API_URL=https://api.aqi.watch
 ```
 
 ### AI API
