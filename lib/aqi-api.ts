@@ -82,7 +82,7 @@ export type AQIOverviewResponse = {
   data_source: string;
 }
 
-const API_BASE_URL = process.env.NEXT_PUBLIC_AQI_API_URL || 'http://46.202.82.152';
+const API_BASE_URL = process.env.NEXT_PUBLIC_AQI_API_URL || '/api/aqi';
 
 export class AQIApiService {
   private baseUrl: string;
@@ -120,8 +120,8 @@ export class AQIApiService {
 
   async getHealthCheck(): Promise<{ status: string; predictor_loaded: boolean; timestamp: string }> {
     try {
-      const response = await fetch(`${this.baseUrl}/health`, {
-        method: 'GET',
+      const response = await fetch(`${this.baseUrl}`, {
+        method: 'POST',
         headers: {
           'Content-Type': 'application/json',
         },
