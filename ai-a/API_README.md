@@ -27,7 +27,7 @@ A Flask-based REST API server that provides comprehensive Air Quality Index (AQI
 
 3. **Test the API:**
    ```bash
-   curl "https://api.aqi.watch/overview?lat=37.7749&lon=-122.4194"
+   curl "http://46.202.82.152/overview?lat=37.7749&lon=-122.4194"
    ```
 
 ### Using Python directly
@@ -54,7 +54,7 @@ Get comprehensive AQI overview for given coordinates.
 
 **Example:**
 ```bash
-curl "https://api.aqi.watch/overview?lat=37.7749&lon=-122.4194"
+curl "http://46.202.82.152/overview?lat=37.7749&lon=-122.4194"
 ```
 
 **Response:**
@@ -131,16 +131,16 @@ API information and usage examples.
 
 ```bash
 # Get AQI for San Francisco
-curl "https://api.aqi.watch/overview?lat=37.7749&lon=-122.4194"
+curl "http://46.202.82.152/overview?lat=37.7749&lon=-122.4194"
 
 # Get AQI for New York
-curl "https://api.aqi.watch/overview?lat=40.7128&lon=-74.0060"
+curl "http://46.202.82.152/overview?lat=40.7128&lon=-74.0060"
 
 # Use demo data
-curl "https://api.aqi.watch/overview?lat=37.7749&lon=-122.4194&use_demo=true"
+curl "http://46.202.82.152/overview?lat=37.7749&lon=-122.4194&use_demo=true"
 
 # Health check
-curl "https://api.aqi.watch/health"
+curl "http://46.202.82.152/health"
 ```
 
 ### Using Python requests
@@ -149,7 +149,7 @@ curl "https://api.aqi.watch/health"
 import requests
 
 # Get AQI data
-response = requests.get("https://api.aqi.watch/overview", params={
+response = requests.get("http://46.202.82.152/overview", params={
     "lat": 37.7749,
     "lon": -122.4194
 })
@@ -163,7 +163,7 @@ print(f"Category: {data['current_aqi']['category']}")
 
 ```javascript
 // Get AQI data
-fetch('https://api.aqi.watch/overview?lat=37.7749&lon=-122.4194')
+fetch('http://46.202.82.152/overview?lat=37.7749&lon=-122.4194')
   .then(response => response.json())
   .then(data => {
     console.log(`Current AQI: ${data.current_aqi.value}`);

@@ -2,7 +2,7 @@
 
 export const config = {
   // AQI API Configuration
-  aqiApiUrl: process.env.NEXT_PUBLIC_AQI_API_URL || 'https://api.aqi.watch',
+  aqiApiUrl: process.env.NEXT_PUBLIC_AQI_API_URL || 'http://46.202.82.152',
   
   // Default coordinates for demo purposes
   defaultLocation: {
