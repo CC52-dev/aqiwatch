@@ -14,6 +14,7 @@ ENV TF_CPP_MIN_VLOG_LEVEL=3
 RUN apt-get update && apt-get install -y \
     gcc \
     g++ \
+    curl \
     && rm -rf /var/lib/apt/lists/*
 
 # Copy requirements first for better caching
@@ -25,17 +26,18 @@ RUN pip install --no-cache-dir -r requirements.txt
 # Copy the entire project
 COPY . .
 
-# Create a non-root user for security
+# Create a non-root user for security but ensure proper permissions
 RUN useradd --create-home --shell /bin/bash appuser && \
-    chown -R appuser:appuser /app
+    chown -R appuser:appuser /app && \
+    chmod -R 755 /app
 USER appuser
 
 # Expose port 5000
 EXPOSE 5000
 
-# Health check
-HEALTHCHECK --interval=30s --timeout=10s --start-period=5s --retries=3 \
+# Health check with curl installed
+HEALTHCHECK --interval=30s --timeout=10s --start-period=30s --retries=3 \
     CMD curl -f http://localhost:5000/health || exit 1
 
-# Run the server
-CMD ["python", "server.py"]
+# Run the server with proper host binding
+CMD ["python", "-u", "server.py"]

@@ -1,0 +1,35 @@
+version: '3.8'
+
+services:
+  # Next.js Frontend
+  frontend:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    ports:
+      - "3000:3000"
+    environment:
+      - NODE_ENV=production
+      - NEXT_PUBLIC_AQI_API_URL=http://ai-api:5000
+    depends_on:
+      - ai-api
+    networks:
+      - aqi-network
+
+  # AI API Backend
+  ai-api:
+    build:
+      context: ./ai-a
+      dockerfile: Dockerfile
+    ports:
+      - "5000:5000"
+    environment:
+      - FLASK_ENV=production
+    volumes:
+      - ./ai-a:/app
+    networks:
+      - aqi-network
+
+networks:
+  aqi-network:
+    driver: bridge
