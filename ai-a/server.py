@@ -16,6 +16,11 @@ warnings.filterwarnings("ignore")
 os.environ['TF_CPP_MIN_LOG_LEVEL'] = '3'  # Suppress TensorFlow logs
 os.environ['TF_ENABLE_ONEDNN_OPTS'] = '0'  # Disable oneDNN optimizations
 os.environ['TF_CPP_MIN_VLOG_LEVEL'] = '3'  # Suppress verbose logs
+# Additional optimizations to prevent SIGILL errors
+os.environ['TF_DISABLE_MKL'] = '1'  # Disable Intel MKL optimizations
+os.environ['TF_DISABLE_POOL_ALLOCATOR'] = '1'  # Disable pool allocator
+os.environ['OMP_NUM_THREADS'] = '1'  # Limit OpenMP threads
+os.environ['MKL_NUM_THREADS'] = '1'  # Limit MKL threads
 
 from aqi_predictor import AQIPredictor
 import tensorflow as tf
