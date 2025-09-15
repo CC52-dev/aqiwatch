@@ -82,7 +82,7 @@ export type AQIOverviewResponse = {
   data_source: string;
 }
 
-const API_BASE_URL = process.env.NEXT_PUBLIC_AQI_API_URL || '/api/aqi-proxy';
+const API_BASE_URL = process.env.NEXT_PUBLIC_AQI_API_URL || 'https://api.aqi.watch';
 
 export class AQIApiService {
   private baseUrl: string;
