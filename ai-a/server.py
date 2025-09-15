@@ -9,7 +9,6 @@ import requests
 import numpy as np
 from datetime import datetime, timedelta
 from flask import Flask, request, jsonify
-from flask_cors import CORS
 
 # Suppress all warnings and AI-related messages
 warnings.filterwarnings("ignore")
@@ -32,7 +31,6 @@ logging.getLogger('keras').setLevel(logging.ERROR)
 logging.getLogger('absl').setLevel(logging.ERROR)
 
 app = Flask(__name__)
-CORS(app)
 
 # Global predictor instance
 predictor = None

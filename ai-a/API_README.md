@@ -200,4 +200,3 @@ To modify the API:
 - The API automatically falls back to demo data if the real API is unavailable
 - All TensorFlow warnings and logs are suppressed for clean output
 - The server runs on all interfaces (0.0.0.0) to work in Docker containers
-- CORS is enabled to allow cross-origin requests from web applications
