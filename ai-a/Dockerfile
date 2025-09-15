@@ -26,11 +26,8 @@ RUN pip install --no-cache-dir -r requirements.txt
 # Copy the entire project
 COPY . .
 
-# Create a non-root user for security but ensure proper permissions
-RUN useradd --create-home --shell /bin/bash appuser && \
-    chown -R appuser:appuser /app && \
-    chmod -R 755 /app
-USER appuser
+# Set permissions for app directory
+RUN chmod -R 755 /app
 
 # Expose port 5000
 EXPOSE 5000
