@@ -101,9 +101,6 @@ export class AQIApiService {
 
       const response = await fetch(`${this.baseUrl}/overview?${params}`, {
         method: 'GET',
-        headers: {
-          'Content-Type': 'application/json',
-        },
       });
 
       if (!response.ok) {
@@ -122,9 +119,6 @@ export class AQIApiService {
     try {
       const response = await fetch(`${this.baseUrl}/health`, {
         method: 'GET',
-        headers: {
-          'Content-Type': 'application/json',
-        },
       });
 
       if (!response.ok) {
