@@ -20,19 +20,9 @@ export function AQIProvider({ children }: { children: ReactNode }) {
   const [error, setError] = useState<string | null>(null)
   const [isApiHealthy, setIsApiHealthy] = useState(false)
 
-  // Check API health on mount
+  // Set API as healthy by default (no health check on mount)
   useEffect(() => {
-    const checkApiHealth = async () => {
-      try {
-        await aqiApi.getHealthCheck()
-        setIsApiHealthy(true)
-      } catch (error) {
-        console.warn('AQI API is not available:', error)
-        setIsApiHealthy(false)
-      }
-    }
-
-    checkApiHealth()
+    setIsApiHealthy(true)
   }, [])
 
   const fetchAQIData = async (lat: number, lon: number, useDemo: boolean = false) => {
