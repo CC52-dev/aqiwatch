@@ -15,19 +15,25 @@ ENV TF_DISABLE_POOL_ALLOCATOR=1
 ENV OMP_NUM_THREADS=1
 ENV MKL_NUM_THREADS=1
 
-# Install system dependencies
+# Install system dependencies and clean up immediately
 RUN apt-get update && apt-get install -y \
     gcc \
     g++ \
     curl \
     libgomp1 \
-    && rm -rf /var/lib/apt/lists/*
+    && rm -rf /var/lib/apt/lists/* \
+    && apt-get clean
 
 # Copy requirements first for better caching
 COPY requirements.txt .
 
-# Install Python dependencies
-RUN pip install --no-cache-dir -r requirements.txt
+# Install Python dependencies with space optimization
+RUN pip install --no-cache-dir --upgrade pip && \
+    pip install --no-cache-dir --no-deps tensorflow-cpu==2.10.0 && \
+    pip install --no-cache-dir -r requirements.txt && \
+    pip cache purge && \
+    find /usr/local/lib/python3.9/site-packages -name "*.pyc" -delete && \
+    find /usr/local/lib/python3.9/site-packages -name "__pycache__" -type d -exec rm -rf {} + 2>/dev/null || true
 
 # Copy the entire project
 COPY . .

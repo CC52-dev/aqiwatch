@@ -1,5 +1,5 @@
-# Use the official Node.js 18 image as the base image
-FROM node:18-alpine AS base
+# Use the official Node.js latest image as the base image
+FROM node:latest AS base
 
 # Install dependencies only when needed
 FROM base AS deps
@@ -9,7 +9,7 @@ WORKDIR /app
 
 # Install dependencies based on the preferred package manager
 COPY package.json package-lock.json* ./
-RUN npm ci --only=production
+RUN npm i --force
 
 # Rebuild the source code only when needed
 FROM base AS builder
