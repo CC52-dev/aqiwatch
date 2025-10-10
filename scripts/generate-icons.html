@@ -74,10 +74,46 @@
 
     <div class="preview">
       <div class="icon-preview">
+        <h3>72x72</h3>
+        <canvas id="icon-72" width="72" height="72"></canvas>
+        <br>
+        <button onclick="downloadIcon(72)">Download 72x72</button>
+      </div>
+      <div class="icon-preview">
+        <h3>96x96</h3>
+        <canvas id="icon-96" width="96" height="96"></canvas>
+        <br>
+        <button onclick="downloadIcon(96)">Download 96x96</button>
+      </div>
+      <div class="icon-preview">
+        <h3>128x128</h3>
+        <canvas id="icon-128" width="128" height="128"></canvas>
+        <br>
+        <button onclick="downloadIcon(128)">Download 128x128</button>
+      </div>
+      <div class="icon-preview">
+        <h3>144x144</h3>
+        <canvas id="icon-144" width="144" height="144"></canvas>
+        <br>
+        <button onclick="downloadIcon(144)">Download 144x144</button>
+      </div>
+      <div class="icon-preview">
+        <h3>152x152</h3>
+        <canvas id="icon-152" width="152" height="152"></canvas>
+        <br>
+        <button onclick="downloadIcon(152)">Download 152x152</button>
+      </div>
+      <div class="icon-preview">
         <h3>192x192</h3>
         <canvas id="icon-192" width="192" height="192"></canvas>
         <br>
         <button onclick="downloadIcon(192)">Download 192x192</button>
+      </div>
+      <div class="icon-preview">
+        <h3>384x384</h3>
+        <canvas id="icon-384" width="384" height="384"></canvas>
+        <br>
+        <button onclick="downloadIcon(384)">Download 384x384</button>
       </div>
       <div class="icon-preview">
         <h3>512x512</h3>
@@ -168,13 +204,15 @@
     }
 
     function downloadAll() {
-      downloadIcon(192);
-      setTimeout(() => downloadIcon(512), 500);
+      const sizes = [72, 96, 128, 144, 152, 192, 384, 512];
+      sizes.forEach((size, index) => {
+        setTimeout(() => downloadIcon(size), index * 300);
+      });
     }
 
     // Generate icons on page load
-    drawIcon(192);
-    drawIcon(512);
+    const sizes = [72, 96, 128, 144, 152, 192, 384, 512];
+    sizes.forEach(size => drawIcon(size));
   </script>
 </body>
 </html>
