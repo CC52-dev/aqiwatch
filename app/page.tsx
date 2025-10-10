@@ -5,9 +5,9 @@ import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/com
 import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
 import { Badge } from "@/components/ui/badge"
-import { Wind, MapPin, Search, Loader2, ArrowLeft, TrendingDown, Shield, Activity, Eye, Info, Target, Users, Globe, Database, Zap } from "lucide-react"
+import { Wind, MapPin, Search, Loader2, ArrowLeft, TrendingDown, Shield, Activity, Eye, Info, Target, Users, Globe, Database, Zap, AlertCircle, WifiOff, XCircle } from "lucide-react"
 import { ThemeToggle } from "@/components/theme-toggle"
-import ElectricBorder from "@/components/ElectricBorder"
+import ConditionalElectricBorder from "@/components/ConditionalElectricBorder"
 import { AQIProvider, useAQI } from "@/contexts/AQIContext"
 import { AQIResults } from "@/components/aqi-results"
 import { geocodingService, GeocodingResult } from "@/lib/geocoding"
@@ -26,7 +26,8 @@ function HomePageContent() {
   const [searchSuggestions, setSearchSuggestions] = useState<GeocodingResult[]>([])
   const [showSuggestions, setShowSuggestions] = useState(false)
   const [isSearching, setIsSearching] = useState(false)
-  const { aqiData, fetchAQIData, isApiHealthy } = useAQI()
+  const [errorState, setErrorState] = useState<{type: string, message: string} | null>(null)
+  const { aqiData, fetchAQIData, isApiHealthy, error: apiError } = useAQI()
 
   // Add error boundary protection
   useEffect(() => {
@@ -63,18 +64,24 @@ function HomePageContent() {
   const handleLocationSelect = async (location: Location) => {
     setSelectedLocation(location)
     setIsLoading(true)
+    setErrorState(null)
     try {
       // Fetch AQI data for the selected location
       await fetchAQIData(location.lat, location.lng, !isApiHealthy)
       setShowResults(true)
     } catch (error) {
       console.error('Error fetching AQI data:', error)
+      setErrorState({
+        type: 'network',
+        message: 'Unable to fetch air quality data. Please check your internet connection and try again.'
+      })
     } finally {
-    setIsLoading(false)
+      setIsLoading(false)
     }
   }
 
   const handleCurrentLocation = async () => {
+    setErrorState(null)
     if (navigator.geolocation) {
       navigator.geolocation.getCurrentPosition(
         async (position) => {
@@ -103,18 +110,37 @@ function HomePageContent() {
         },
         (error) => {
           console.warn('Geolocation error:', error)
-          const fallback = { lat: 40.7128, lng: -74.006, name: "New York, NY" }
-          handleLocationSelect(fallback)
+          let errorMessage = 'Unable to access your location.'
+          
+          switch (error.code) {
+            case error.PERMISSION_DENIED:
+              errorMessage = 'Location access denied. Please enable location permissions in your browser settings.'
+              break
+            case error.POSITION_UNAVAILABLE:
+              errorMessage = 'Location information is unavailable. Please try searching for a city instead.'
+              break
+            case error.TIMEOUT:
+              errorMessage = 'Location request timed out. Please try again or search for a city.'
+              break
+          }
+          
+          setErrorState({
+            type: 'geolocation',
+            message: errorMessage
+          })
         },
       )
     } else {
-      const fallback = { lat: 40.7128, lng: -74.006, name: "New York, NY" }
-      handleLocationSelect(fallback)
+      setErrorState({
+        type: 'geolocation',
+        message: 'Geolocation is not supported by your browser. Please search for a city instead.'
+      })
     }
   }
 
   const handleSearchInput = async (query: string) => {
     setSearchQuery(query)
+    setErrorState(null)
     
     if (query.trim().length < 3) {
       setSearchSuggestions([])
@@ -131,6 +157,10 @@ function HomePageContent() {
       console.error('Search error:', error)
       setSearchSuggestions([])
       setShowSuggestions(false)
+      setErrorState({
+        type: 'search',
+        message: 'Unable to search for locations. Please check your internet connection and try again.'
+      })
     } finally {
       setIsSearching(false)
     }
@@ -162,7 +192,7 @@ function HomePageContent() {
   if (isLoading) {
     return (
       <div className="min-h-screen flex items-center justify-center p-4">
-        <ElectricBorder
+        <ConditionalElectricBorder
           className="w-full max-w-lg"
           color="#7df9ff"
           speed={1}
@@ -202,7 +232,7 @@ function HomePageContent() {
               </div>
             </CardContent>
           </Card>
-        </ElectricBorder>
+        </ConditionalElectricBorder>
       </div>
     )
   }
@@ -210,7 +240,7 @@ function HomePageContent() {
   if (showResults && selectedLocation) {
     return (
       <div className="min-h-screen bg-background">
-        <div className="max-w-7xl mx-auto p-6 space-y-8">
+        <div className="max-w-7xl mx-auto p-3 sm:p-6 space-y-6 sm:space-y-8">
           {/* Header */}
           <div className="flex items-center justify-between">
             <div className="flex items-center gap-4">
@@ -241,7 +271,7 @@ function HomePageContent() {
           </div>
 
           {/* Bento Grid Layout with Real Data */}
-          <div className="grid grid-cols-1 lg:grid-cols-4 gap-6">
+          <div className="grid grid-cols-1 lg:grid-cols-4 gap-4 sm:gap-6">
             {/* AQI Status Card - Top Left */}
             <div className="lg:col-span-1 space-y-6">
               <Card className="h-fit">
@@ -324,34 +354,56 @@ function HomePageContent() {
                 <CardTitle className="text-xl">7-Day Air Quality Trend</CardTitle>
                 <p className="text-sm text-muted-foreground">Historical data and predictions</p>
               </CardHeader>
-              <CardContent>
-                <div className="h-96 flex items-end justify-between gap-2 p-4 bg-muted/30 rounded-lg">
-                  {aqiData?.historical_data?.concat(aqiData?.predicted_data || [])?.map((dataPoint, index) => (
-                    <div key={index} className="flex flex-col items-center gap-2 flex-1 h-full">
-                      <div className="text-xs font-semibold text-foreground mb-1">{dataPoint.aqi}</div>
-                      <div className="w-full flex-1 flex items-end">
-                        <div
-                          className={`w-full rounded-t-lg transition-all duration-300 hover:opacity-80 ${
-                            index < (aqiData?.historical_data?.length || 0)
-                              ? "bg-primary shadow-lg"
-                              : "bg-muted-foreground/30 border-2 border-dashed border-muted-foreground/50"
-                          }`}
-                          style={{ height: `${(dataPoint.aqi / 60) * 100}%` }}
-                        ></div>
+              <CardContent className="overflow-x-auto">
+                {(() => {
+                  const allData = aqiData?.historical_data?.concat(aqiData?.predicted_data || []) || []
+                  const maxAqi = allData.length > 0 ? Math.max(...allData.map(d => d.aqi), 50) : 50
+                  const chartHeight = 320 // Fixed height in pixels for proper scaling
+                  
+                  return allData.length > 0 ? (
+                    <div className="min-w-full">
+                      {/* Chart container */}
+                      <div className="flex items-end justify-between gap-1 sm:gap-2 p-2 sm:p-4 bg-muted/30 rounded-lg" style={{ height: `${chartHeight}px` }}>
+                        {allData.map((dataPoint, index) => {
+                          const barHeight = Math.max((dataPoint.aqi / maxAqi) * (chartHeight - 80), 20) // Reserve 80px for labels
+                          
+                          return (
+                            <div key={index} className="flex flex-col items-center justify-end flex-1 min-w-[20px] sm:min-w-[30px] h-full">
+                              {/* Value label on top */}
+                              <div className="text-[10px] sm:text-xs font-semibold text-foreground mb-2">{dataPoint.aqi}</div>
+                              
+                              {/* Bar */}
+                              <div
+                                className={`w-full rounded-t-lg transition-all duration-300 hover:opacity-80 ${
+                                  index < (aqiData?.historical_data?.length || 0)
+                                    ? "bg-primary shadow-lg"
+                                    : "bg-muted-foreground/30 border-2 border-dashed border-muted-foreground/50"
+                                }`}
+                                style={{ height: `${barHeight}px` }}
+                              ></div>
+                              
+                              {/* Day label at bottom */}
+                              <div className="text-[10px] sm:text-xs font-medium text-muted-foreground mt-2">
+                                {index < (aqiData?.historical_data?.length || 0) 
+                                  ? `${(aqiData?.historical_data?.length || 0) - index}d` 
+                                  : `+${index - (aqiData?.historical_data?.length || 0) + 1}d`}
+                              </div>
+                            </div>
+                          )
+                        })}
                       </div>
-                      <span className="text-xs font-medium text-muted-foreground mt-2">
-                        {index < (aqiData?.historical_data?.length || 0) ? `${(aqiData?.historical_data?.length || 0) - index}d` : `+${index - (aqiData?.historical_data?.length || 0) + 1}d`}
-                      </span>
                     </div>
-                  )) || (
-                    <div className="flex items-center justify-center w-full h-full">
+                  ) : (
+                    <div className="flex items-center justify-center bg-muted/30 rounded-lg" style={{ height: `${chartHeight}px` }}>
                       <div className="text-center space-y-2">
                         <Activity className="h-12 w-12 mx-auto text-muted-foreground" />
                         <p className="text-sm text-muted-foreground">Loading chart data...</p>
                       </div>
                     </div>
-                  )}
-                </div>
+                  )
+                })()}
+                
+                {/* Legend */}
                 <div className="flex justify-center gap-6 text-sm mt-4">
                   <div className="flex items-center gap-2">
                     <div className="w-3 h-3 bg-primary rounded shadow-sm"></div>
@@ -409,7 +461,7 @@ function HomePageContent() {
                 <CardTitle className="text-lg">Recommendations</CardTitle>
               </CardHeader>
               <CardContent>
-                <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+                <div className="grid grid-cols-1 sm:grid-cols-3 gap-3 sm:gap-4">
                   <div className="text-center p-4 bg-green-50 dark:bg-green-900/10 rounded-lg hover:shadow-md transition-shadow">
                     <div className="w-12 h-12 mx-auto mb-3 rounded-full bg-green-100 dark:bg-green-900/20 flex items-center justify-center">
                       <Activity className="h-6 w-6 text-green-600 dark:text-green-400" />
@@ -437,7 +489,7 @@ function HomePageContent() {
           </div>
 
           {/* Pollutant Breakdown */}
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-3">
+          <div className="grid grid-cols-1 sm:grid-cols-3 gap-3 sm:gap-4">
             <Card>
               <CardContent className="p-4 text-center space-y-3">
                 <div className="w-10 h-10 mx-auto rounded-lg bg-blue-100 dark:bg-blue-900/20 flex items-center justify-center">
@@ -497,7 +549,7 @@ function HomePageContent() {
   return (
     <div className="min-h-screen bg-background">
       {/* Hero Section - 100vh */}
-      <div className="h-screen flex items-center justify-center">
+      <div className="min-h-screen flex items-center justify-center pt-20 pb-12 sm:pt-0 sm:pb-0">
         <div className="max-w-4xl mx-auto px-6 w-full">
         {/* Header */}
         <div className="text-center space-y-8 mb-12 animate-slide-up">
@@ -557,7 +609,7 @@ function HomePageContent() {
           </div>
 
           {/* Location Selection */}
-          <ElectricBorder
+          <ConditionalElectricBorder
               className="w-full"
    color="#7df9ff"
    speed={1}
@@ -571,6 +623,40 @@ function HomePageContent() {
                 <p className="text-muted-foreground">Select your location to view air quality data</p>
               </CardHeader>
               <CardContent className="space-y-6">
+              {/* Error Message Display */}
+              {(errorState || apiError) && (
+                <div className={`p-4 rounded-lg border flex items-start gap-3 ${
+                  errorState?.type === 'network' || apiError ? 'bg-red-50 dark:bg-red-900/10 border-red-200 dark:border-red-900/50' :
+                  errorState?.type === 'geolocation' ? 'bg-yellow-50 dark:bg-yellow-900/10 border-yellow-200 dark:border-yellow-900/50' :
+                  'bg-orange-50 dark:bg-orange-900/10 border-orange-200 dark:border-orange-900/50'
+                }`}>
+                  {errorState?.type === 'network' || apiError ? (
+                    <WifiOff className="h-5 w-5 text-red-600 dark:text-red-400 flex-shrink-0 mt-0.5" />
+                  ) : errorState?.type === 'geolocation' ? (
+                    <AlertCircle className="h-5 w-5 text-yellow-600 dark:text-yellow-400 flex-shrink-0 mt-0.5" />
+                  ) : (
+                    <XCircle className="h-5 w-5 text-orange-600 dark:text-orange-400 flex-shrink-0 mt-0.5" />
+                  )}
+                  <div className="flex-1">
+                    <p className={`text-sm font-medium ${
+                      errorState?.type === 'network' || apiError ? 'text-red-800 dark:text-red-200' :
+                      errorState?.type === 'geolocation' ? 'text-yellow-800 dark:text-yellow-200' :
+                      'text-orange-800 dark:text-orange-200'
+                    }`}>
+                      {apiError || errorState?.message}
+                    </p>
+                  </div>
+                  <Button
+                    variant="ghost"
+                    size="sm"
+                    onClick={() => { setErrorState(null) }}
+                    className="h-6 w-6 p-0 hover:bg-transparent"
+                  >
+                    <XCircle className="h-4 w-4" />
+                  </Button>
+                </div>
+              )}
+              
               <Button
                 onClick={handleCurrentLocation}
                 className="w-full cursor-pointer"
@@ -640,7 +726,7 @@ function HomePageContent() {
                 </Button>
               </CardContent>
             </Card>
-          </ElectricBorder>
+          </ConditionalElectricBorder>
         </div>
         </div>
       </div>
