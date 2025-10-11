@@ -8,9 +8,14 @@ import { Suspense } from "react"
 import "./globals.css"
 
 export const metadata: Metadata = {
-  title: "AQIWatch - Real-time Air Quality Monitoring",
-  description: "Monitor air quality with real-time data, AI-powered predictions, and comprehensive health insights for your location",
+  title: "AQIWatch – Real-time Air Quality Data & AI Health Insights",
+  description: "Monitor air quality worldwide with AQIWatch – real-time data, AI-driven air quality predictions, and up-to-date health insights for safer living.",
+  keywords: ["Air Quality", "Real-time Monitoring", "AI", "Health Insights", "AQI", "Data", "Predictions", "AQIWatch", "Air Pollution", "Environmental Health"],
   generator: "v0.app",
+  metadataBase: new URL('https://aqi.watch'),
+  alternates: {
+    canonical: '/',
+  },
   appleWebApp: {
     capable: true,
     statusBarStyle: "default",
@@ -22,13 +27,15 @@ export const metadata: Metadata = {
   openGraph: {
     type: "website",
     siteName: "AQIWatch",
-    title: "AQIWatch - Real-time Air Quality Monitoring",
-    description: "Monitor air quality with real-time data, AI-powered predictions, and comprehensive health insights",
+    title: "AQIWatch – Real-time Air Quality Data & AI Health Insights",
+    description: "Monitor air quality with real-time data, AI predictions and health info. Stay safe with AQIWatch.",
+    url: "https://aqi.watch/",
+    locale: "en_US",
   },
   twitter: {
-    card: "summary",
-    title: "AQIWatch - Real-time Air Quality Monitoring",
-    description: "Monitor air quality with real-time data, AI-powered predictions, and comprehensive health insights",
+    card: "summary_large_image",
+    title: "AQIWatch – Real-time Air Quality Data & AI Health Insights",
+    description: "Monitor air quality with real-time data, AI predictions and health info. Stay safe with AQIWatch.",
   },
 }
 

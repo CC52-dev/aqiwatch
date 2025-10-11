@@ -11,6 +11,7 @@ import ConditionalElectricBorder from "@/components/ConditionalElectricBorder"
 import { AQIProvider, useAQI } from "@/contexts/AQIContext"
 import { AQIResults } from "@/components/aqi-results"
 import { geocodingService, GeocodingResult } from "@/lib/geocoding"
+import { PWAInstallGuide } from "@/components/pwa-install-guide"
 
 interface Location {
   lat: number
@@ -915,6 +916,9 @@ function HomePageContent() {
             </div>
           </CardContent>
         </Card>
+
+        {/* PWA Installation Guide */}
+        <PWAInstallGuide />
       </div>
     </div>
   )
