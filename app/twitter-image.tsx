@@ -94,6 +94,7 @@ export default async function Image() {
                 color: '#ffffff',
                 margin: 0,
                 letterSpacing: '-0.02em',
+                textAlign: 'center',
               }}
             >
               AQIWatch

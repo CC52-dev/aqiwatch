@@ -12,6 +12,7 @@ import { AQIProvider, useAQI } from "@/contexts/AQIContext"
 import { AQIResults } from "@/components/aqi-results"
 import { geocodingService, GeocodingResult } from "@/lib/geocoding"
 import { PWAInstallGuide } from "@/components/pwa-install-guide"
+import { ArrowUpRight } from "lucide-react"
 
 interface Location {
   lat: number
@@ -754,7 +755,7 @@ function HomePageContent() {
               </div>
               <div className="space-y-3">
                 <div>
-                  <h3 className="text-lg font-semibold text-foreground">Shiv</h3>
+                  <h3 className="text-lg font-semibold text-foreground">Shiven Sharma</h3>
                   <p className="text-muted-foreground">Student in California</p>
                 </div>
                 <p className="text-muted-foreground leading-relaxed">
@@ -767,9 +768,22 @@ function HomePageContent() {
                     href="https://shiv.ac" 
                     target="_blank" 
                     rel="noopener noreferrer"
-                    className="text-primary hover:text-primary/80 transition-colors font-medium"
+                    className="text-primary hover:text-primary/80 transition-colors font-medium flex items-center gap-2 flex-row"
                   >
                     shiv.ac
+                    <ArrowUpRight className="h-4 w-4" />
+
+                  </a> 
+                  <span className="mx-1 text-muted-foreground">|</span>
+                  
+                  <a 
+                    href="https://www.linkedin.com/in/shiven-sharma-studio/" 
+                    target="_blank" 
+                    rel="noopener noreferrer"
+                    className="text-primary hover:text-primary/80 transition-colors font-medium flex items-center gap-2 flex-row"
+                  >
+                    linkedin
+                    <ArrowUpRight className="h-4 w-4" />
                   </a>
                 </div>
               </div>
