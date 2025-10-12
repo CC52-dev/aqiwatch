@@ -1,0 +1,10 @@
+[2025-10-12 14:26:05] ============================================================
+[2025-10-12 14:26:05] 🌬️  AQI Server Monitor Started
+[2025-10-12 14:26:05] ============================================================
+[2025-10-12 14:26:05] 📊 Configuration:
+[2025-10-12 14:26:05]    - Restart interval: 12 hours
+[2025-10-12 14:26:05]    - Auto-restart on crash: Enabled
+[2025-10-12 14:26:05]    - Log file: C:\Users\Administrator\Downloads\aqiwatch\ai-a\logs\server_20251012_142605.log
+[2025-10-12 14:26:05] 
+[2025-10-12 14:26:05] 🚀 Starting AQI server...
+[2025-10-12 14:26:05] ✅ Server started with PID: 8912

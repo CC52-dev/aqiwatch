@@ -3,12 +3,19 @@ AQI Prediction API Server
 Provides REST API endpoints for AQI prediction and analysis
 """
 import os
+import sys
 import warnings
 import logging
 import requests
 import numpy as np
 from datetime import datetime, timedelta
 from flask import Flask, request, jsonify
+
+# Fix Windows console encoding for Unicode/emoji support
+if sys.platform == 'win32':
+    import codecs
+    sys.stdout = codecs.getwriter('utf-8')(sys.stdout.buffer, 'replace')
+    sys.stderr = codecs.getwriter('utf-8')(sys.stderr.buffer, 'replace')
 
 # Suppress all warnings and AI-related messages
 warnings.filterwarnings("ignore")

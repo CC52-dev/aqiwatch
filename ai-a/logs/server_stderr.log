@@ -1,0 +1,53 @@
+Traceback (most recent call last):
+  File "C:\Users\Administrator\Downloads\aqiwatch\ai-a\server.py", line 631, in <module>
+    print("\U0001f32c\ufe0f  Starting AQI Prediction API Server")
+    ~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Python313\Lib\encodings\cp1252.py", line 19, in encode
+    return codecs.charmap_encode(input,self.errors,encoding_table)[0]
+           ~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+UnicodeEncodeError: 'charmap' codec can't encode characters in position 0-1: character maps to <undefined>
+Traceback (most recent call last):
+  File "C:\Users\Administrator\Downloads\aqiwatch\ai-a\server.py", line 631, in <module>
+    print("\U0001f32c\ufe0f  Starting AQI Prediction API Server")
+    ~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Python313\Lib\encodings\cp1252.py", line 19, in encode
+    return codecs.charmap_encode(input,self.errors,encoding_table)[0]
+           ~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+UnicodeEncodeError: 'charmap' codec can't encode characters in position 0-1: character maps to <undefined>
+Traceback (most recent call last):
+  File "C:\Users\Administrator\Downloads\aqiwatch\ai-a\server.py", line 631, in <module>
+    print("\U0001f32c\ufe0f  Starting AQI Prediction API Server")
+    ~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Python313\Lib\encodings\cp1252.py", line 19, in encode
+    return codecs.charmap_encode(input,self.errors,encoding_table)[0]
+           ~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+UnicodeEncodeError: 'charmap' codec can't encode characters in position 0-1: character maps to <undefined>
+Traceback (most recent call last):
+  File "C:\Users\Administrator\Downloads\aqiwatch\ai-a\server.py", line 631, in <module>
+    print("\U0001f32c\ufe0f  Starting AQI Prediction API Server")
+    ~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Python313\Lib\encodings\cp1252.py", line 19, in encode
+    return codecs.charmap_encode(input,self.errors,encoding_table)[0]
+           ~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+UnicodeEncodeError: 'charmap' codec can't encode characters in position 0-1: character maps to <undefined>
+INFO:werkzeug:[31m[1mWARNING: This is a development server. Do not use it in a production deployment. Use a production WSGI server instead.[0m
+ * Running on all addresses (0.0.0.0)
+ * Running on http://127.0.0.1:5000
+ * Running on http://45.86.155.22:5000
+INFO:werkzeug:[33mPress CTRL+C to quit[0m
+INFO:werkzeug:[31m[1mWARNING: This is a development server. Do not use it in a production deployment. Use a production WSGI server instead.[0m
+ * Running on all addresses (0.0.0.0)
+ * Running on http://127.0.0.1:5000
+ * Running on http://45.86.155.22:5000
+INFO:werkzeug:[33mPress CTRL+C to quit[0m
+INFO:werkzeug:127.0.0.1 - - [12/Oct/2025 14:26:35] "GET /health HTTP/1.1" 200 -
+INFO:werkzeug:127.0.0.1 - - [12/Oct/2025 14:26:50] "GET /health HTTP/1.1" 200 -
+INFO:werkzeug:127.0.0.1 - - [12/Oct/2025 14:27:06] "GET /health HTTP/1.1" 200 -
+INFO:werkzeug:127.0.0.1 - - [12/Oct/2025 14:27:22] "GET /overview?lat=37.7749&lon=-122.4194&use_demo=true HTTP/1.1" 200 -
+INFO:werkzeug:127.0.0.1 - - [12/Oct/2025 14:28:04] "GET /health HTTP/1.1" 200 -
+INFO:werkzeug:[31m[1mWARNING: This is a development server. Do not use it in a production deployment. Use a production WSGI server instead.[0m
+ * Running on all addresses (0.0.0.0)
+ * Running on http://127.0.0.1:5000
+ * Running on http://45.86.155.22:5000
+INFO:werkzeug:[33mPress CTRL+C to quit[0m
+INFO:werkzeug:127.0.0.1 - - [12/Oct/2025 14:37:35] "GET /health HTTP/1.1" 200 -
