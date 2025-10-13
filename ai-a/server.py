@@ -46,12 +46,23 @@ def initialize_predictor():
     """Initialize the AQI predictor with the trained model"""
     global predictor
     try:
+        print("Loading AQI predictor...")
         predictor = AQIPredictor()
+        
+        print("Loading ML model from improved_aqi_model.h5...")
         predictor.load_model('improved_aqi_model.h5')
+        
         print("✅ AQI Predictor initialized successfully")
         return True
+    except FileNotFoundError as e:
+        print(f"❌ Model file not found: {e}")
+        print("Current directory:", os.getcwd())
+        print("Files in directory:", os.listdir('.'))
+        return False
     except Exception as e:
         print(f"❌ Failed to initialize predictor: {e}")
+        import traceback
+        traceback.print_exc()
         return False
 
 def fetch_aqi_data(lat, lon, api_key):
@@ -640,10 +651,19 @@ if __name__ == '__main__':
     
     # Initialize predictor
     if initialize_predictor():
-        print("🚀 Server starting on http://https://api.aqi.watch")
-        print("📖 API Documentation available at http://https://api.aqi.watch/")
-        print("🔍 Health check at http://https://api.aqi.watch/health")
-        print("🌍 AQI Overview at http://https://api.aqi.watch/overview?lat=37.7749&lon=-122.4194")
-        app.run(host='0.0.0.0', port=5000, debug=False)
+        print("🚀 Server starting on http://0.0.0.0:5000")
+        print("📖 API Documentation available at http://localhost:5000/")
+        print("🔍 Health check at http://localhost:5000/health")
+        print("🌍 AQI Overview at http://localhost:5000/overview?lat=37.7749&lon=-122.4194")
+        print("=" * 50)
+        
+        # Run server
+        try:
+            app.run(host='0.0.0.0', port=5000, debug=False)
+        except Exception as e:
+            print(f"❌ Server error: {e}")
+            sys.exit(1)
     else:
         print("❌ Failed to start server - predictor initialization failed")
+        print("Check if improved_aqi_model.h5 exists in the current directory")
+        sys.exit(1)
