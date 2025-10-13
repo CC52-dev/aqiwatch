@@ -41,11 +41,10 @@ RUN pip install --no-cache-dir --upgrade pip && \
 COPY . .
 
 # Set permissions for scripts
-RUN chmod +x start.sh && chmod -R 755 /app
+RUN chmod +x start.sh entrypoint.sh diagnose.py && chmod -R 755 /app
 
 # Expose port 5000
 EXPOSE 5000
 
-
-# Run the monitoring script which handles auto-restart
-CMD ["python3", "monitor.py"]
+# Use entrypoint script for better startup logging and validation
+ENTRYPOINT ["/app/entrypoint.sh"]
