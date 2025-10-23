@@ -1,0 +1,91 @@
+═══════════════════════════════════════════════════════════════
+   "ILLEGAL INSTRUCTION" FIX - QUICK INSTRUCTIONS
+═══════════════════════════════════════════════════════════════
+
+YOUR PROBLEM:
+  Python crashes with "Illegal instruction (core dumped)"
+  This is a CPU compatibility issue with TensorFlow 2.20.0
+
+═══════════════════════════════════════════════════════════════
+
+DIAGNOSIS - Which library is failing?
+
+   source aqienv/bin/activate
+   python -c "import numpy; print('NumPy OK')"
+   python -c "import tensorflow; print('TensorFlow OK')"
+
+If TensorFlow crashes → Follow TensorFlow fix below
+If NumPy crashes → Follow NumPy fix below
+
+═══════════════════════════════════════════════════════════════
+
+TENSORFLOW FIX (Most Common):
+
+   cd ~/aqiwatch/ai-a
+   source aqienv/bin/activate
+   pip uninstall -y tensorflow tensorflow-cpu
+   pip cache purge
+   pip install --no-cache-dir "tensorflow-cpu==2.15.0"
+   python diagnose.py
+
+Or use the script:
+   chmod +x FIX_TENSORFLOW.sh
+   ./FIX_TENSORFLOW.sh
+
+═══════════════════════════════════════════════════════════════
+
+NUMPY FIX (If NumPy is the issue):
+
+   source aqienv/bin/activate
+   pip uninstall -y numpy
+   pip install --no-cache-dir "numpy>=1.21.0,<2.0.0"
+   python diagnose.py
+
+═══════════════════════════════════════════════════════════════
+
+WHAT WAS CHANGED:
+
+✓ requirements.txt - Updated TensorFlow to 2.12-2.15 range
+✓ Dockerfile - Added verification step
+✓ FIX_TENSORFLOW.sh - Automated TensorFlow fix script
+✓ TENSORFLOW_CPU_FIX.md - Detailed TensorFlow guide
+✓ NUMPY_CPU_FIX.md - NumPy troubleshooting guide
+✓ TROUBLESHOOTING.md - Updated with both fixes
+
+═══════════════════════════════════════════════════════════════
+
+WHY THIS HAPPENED:
+
+• TensorFlow 2.16+ uses AVX/AVX2 CPU instructions
+• Your server's CPU doesn't support these instructions
+• TensorFlow 2.15 and older are more compatible
+• Solution: Downgrade TensorFlow to 2.15.0 or 2.12.0
+
+═══════════════════════════════════════════════════════════════
+
+EXPECTED RESULT:
+
+BEFORE:
+  [✓] NumPy      version 1.26.4
+  [✓] TensorFlow version 2.20.0
+  Illegal instruction (core dumped)
+
+AFTER:
+  [✓] NumPy      version 1.26.4
+  [✓] TensorFlow version 2.15.0
+  [✓] Model loaded successfully
+  ✓ Server starts successfully
+
+═══════════════════════════════════════════════════════════════
+
+NEED MORE HELP?
+
+See these files:
+  • TENSORFLOW_CPU_FIX.md - Complete TensorFlow guide
+  • NUMPY_CPU_FIX.md - Complete NumPy guide  
+  • TROUBLESHOOTING.md - General troubleshooting guide
+  • FIX_TENSORFLOW.sh - Automated TensorFlow fix
+  • fix_numpy.sh - Automated NumPy fix
+
+═══════════════════════════════════════════════════════════════
+

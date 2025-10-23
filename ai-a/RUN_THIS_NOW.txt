@@ -1,0 +1,114 @@
+╔════════════════════════════════════════════════════════════╗
+║                                                            ║
+║         🔧 FIX FOR "ILLEGAL INSTRUCTION" ERROR             ║
+║                                                            ║
+║   The problem: TensorFlow 2.20.0 requires AVX/AVX2        ║
+║   Your CPU: Doesn't have AVX/AVX2 support                 ║
+║   Solution: Downgrade to TensorFlow 2.15.0                ║
+║                                                            ║
+╚════════════════════════════════════════════════════════════╝
+
+
+═══════════════════════════════════════════════════════════════
+           COPY AND PASTE THESE COMMANDS NOW:
+═══════════════════════════════════════════════════════════════
+
+cd ~/aqiwatch/ai-a
+source aqienv/bin/activate
+pip uninstall -y tensorflow tensorflow-cpu
+pip cache purge
+pip install --no-cache-dir "tensorflow-cpu==2.15.0"
+python -c "import tensorflow as tf; print(f'✓ TensorFlow {tf.__version__} works!')"
+python diagnose.py
+python server.py
+
+
+═══════════════════════════════════════════════════════════════
+                    OR USE THE SCRIPT:
+═══════════════════════════════════════════════════════════════
+
+cd ~/aqiwatch/ai-a
+chmod +x FIX_TENSORFLOW.sh
+source aqienv/bin/activate
+./FIX_TENSORFLOW.sh
+
+
+═══════════════════════════════════════════════════════════════
+                  WHAT WILL HAPPEN:
+═══════════════════════════════════════════════════════════════
+
+Step 1: Remove TensorFlow 2.20.0 (incompatible)
+Step 2: Clear pip cache
+Step 3: Install TensorFlow 2.15.0 (CPU compatible)
+Step 4: Verify it works
+Step 5: Run diagnostic
+Step 6: Start server
+
+
+═══════════════════════════════════════════════════════════════
+                EXPECTED OUTPUT (Success):
+═══════════════════════════════════════════════════════════════
+
+✓ TensorFlow 2.15.0 works!
+
+[✓] Flask                version 3.1.2
+[✓] NumPy                version 1.26.4
+[✓] TensorFlow           version 2.15.0
+[✓] scikit-learn         version X.X.X
+[✓] Requests             version X.X.X
+
+[✓] AQIPredictor imported successfully
+[✓] AQIPredictor instance created
+[✓] Model loaded successfully
+
+🚀 Server starting on http://0.0.0.0:5000
+
+
+═══════════════════════════════════════════════════════════════
+         IF TENSORFLOW 2.15 STILL DOESN'T WORK:
+═══════════════════════════════════════════════════════════════
+
+Try TensorFlow 2.12 (even older, more compatible):
+
+pip uninstall -y tensorflow tensorflow-cpu
+pip install --no-cache-dir "tensorflow-cpu==2.12.0"
+python diagnose.py
+
+
+═══════════════════════════════════════════════════════════════
+           IF YOU STILL HAVE PROBLEMS:
+═══════════════════════════════════════════════════════════════
+
+1. Check CPU capabilities:
+   cat /proc/cpuinfo | grep -i avx
+
+2. Try TensorFlow 2.11 (maximum compatibility):
+   pip install --no-cache-dir "tensorflow-cpu==2.11.0"
+
+3. See detailed guides:
+   - TENSORFLOW_CPU_FIX.md
+   - TROUBLESHOOTING.md
+
+
+═══════════════════════════════════════════════════════════════
+                      DONE? TEST IT:
+═══════════════════════════════════════════════════════════════
+
+python server.py
+
+Then open: http://your-server-ip:5000/health
+
+Expected response:
+{
+  "status": "healthy",
+  "timestamp": "...",
+  "model_loaded": true
+}
+
+
+╔════════════════════════════════════════════════════════════╗
+║                                                            ║
+║  🎯 THAT'S IT! Your server should now work properly.      ║
+║                                                            ║
+╚════════════════════════════════════════════════════════════╝
+

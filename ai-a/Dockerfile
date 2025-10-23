@@ -30,12 +30,15 @@ RUN apt-get update && apt-get install -y \
 # Copy requirements first for better caching
 COPY requirements.txt .
 
-# Install Python dependencies with space optimization
+# Install Python dependencies with space optimization and CPU compatibility
 RUN pip install --no-cache-dir --upgrade pip && \
     pip install --no-cache-dir -r requirements.txt && \
     pip cache purge && \
     find /usr/local/lib/python3.11/site-packages -name "*.pyc" -delete && \
     find /usr/local/lib/python3.11/site-packages -name "__pycache__" -type d -exec rm -rf {} + 2>/dev/null || true
+
+# Verify NumPy works (catch CPU incompatibility early)
+RUN python -c "import numpy; print('NumPy version:', numpy.__version__); numpy.array([1,2,3])"
 
 # Copy the entire project
 COPY . .

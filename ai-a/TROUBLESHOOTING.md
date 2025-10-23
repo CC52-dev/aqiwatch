@@ -1,5 +1,71 @@
 # Troubleshooting Guide
 
+## 🔥 CRITICAL: "Illegal instruction (core dumped)" Error
+
+### Symptom
+```
+python server.py
+Illegal instruction (core dumped)
+```
+
+This is a **CPU compatibility issue** - the problem is usually TensorFlow or NumPy.
+
+### Step 1: Identify Which Library is Failing
+
+```bash
+source aqienv/bin/activate
+
+# Test NumPy
+python -c "import numpy; print('NumPy OK:', numpy.array([1,2,3]).sum())"
+
+# Test TensorFlow
+python -c "import tensorflow; print('TensorFlow OK')"
+```
+
+---
+
+### If **TensorFlow** Crashes (Most Common)
+
+**Quick Fix:**
+```bash
+chmod +x FIX_TENSORFLOW.sh
+source aqienv/bin/activate
+./FIX_TENSORFLOW.sh
+```
+
+**Manual Fix:**
+```bash
+source aqienv/bin/activate
+pip uninstall -y tensorflow tensorflow-cpu
+pip cache purge
+pip install --no-cache-dir "tensorflow-cpu==2.15.0"
+python diagnose.py
+```
+
+📖 **See [TENSORFLOW_CPU_FIX.md](./TENSORFLOW_CPU_FIX.md) for detailed solutions**
+
+---
+
+### If **NumPy** Crashes (Less Common)
+
+```bash
+source aqienv/bin/activate
+pip uninstall -y numpy
+pip install --no-cache-dir "numpy>=1.21.0,<2.0.0"
+python diagnose.py
+```
+
+📖 **See [NUMPY_CPU_FIX.md](./NUMPY_CPU_FIX.md) for NumPy-specific solutions**
+
+---
+
+### Why This Happens
+- TensorFlow 2.16+ and NumPy 2.x use AVX/AVX2 CPU instructions
+- Your CPU doesn't support these instructions
+- Solution: Downgrade to compatible versions
+
+---
+
 ## Server Keeps Crashing
 
 ### Symptom
@@ -49,15 +115,22 @@ ls -lh improved_aqi_model.h5
    docker build --no-cache -t aqi-server .
    ```
 
-#### Issue 2: TensorFlow CPU Errors
+#### Issue 2: TensorFlow/NumPy CPU Errors
 **Symptom:** `Illegal instruction (core dumped)` or SIGILL errors
 
 **Solution:**
-The Dockerfile already includes fixes. If still happening:
+Most likely a NumPy 2.x compatibility issue. See the **CRITICAL** section at the top of this guide.
+
+For TensorFlow-specific issues, the Dockerfile already includes fixes:
 ```dockerfile
 ENV TF_DISABLE_MKL=1
 ENV TF_DISABLE_POOL_ALLOCATOR=1
 ENV OMP_NUM_THREADS=1
+```
+
+If still having issues after fixing NumPy, downgrade TensorFlow:
+```bash
+pip install tensorflow-cpu==2.15.0
 ```
 
 #### Issue 3: Import Errors
